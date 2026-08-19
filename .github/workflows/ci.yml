@@ -1,0 +1,40 @@
+name: MatchClaim Core Gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  core-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install current GenLayer test and lint tooling
+        run: python -m pip install -r requirements-dev.txt
+      - name: Pure and Direct tests
+        run: python -m pytest tests/test_pure.py tests/direct -q
+      - name: Critical mutation gate
+        run: python tools/mutation_test.py
+      - name: GenVM lint and validation
+        env:
+          GENVM_VERSION: v0.3.0-rc7
+        run: genvm-lint check contracts/matchclaim.py --json
+      - name: Production-shaped local GLSim consensus
+        run: python tools/production_shaped_test.py
+      - name: Secret scan
+        run: python tools/secret_scan.py
+      - name: Contract hash report
+        run: python tools/contract_hash.py --write artifacts/contract-hash.json
+      - name: Diff hygiene
+        run: git diff --check
+      - name: Exact-head release gate
+        run: python tools/exact_head_gate.py

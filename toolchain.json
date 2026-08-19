@@ -1,0 +1,17 @@
+{
+  "python": "3.14.3",
+  "genlayer_cli": "0.39.1",
+  "genlayer_test": "0.29.2",
+  "genlayer_py": "0.16.3",
+  "genvm_linter": "0.11.0",
+  "genvm_validation_bundle": "v0.3.0-rc7",
+  "contract_dependency": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6",
+  "local_consensus_runtime": "glsim from genlayer-test 0.29.2",
+  "network_policy": {
+    "local_phase": "GLSim only",
+    "studionet": false,
+    "bradbury_rpc": "https://rpc-bradbury.genlayer.com",
+    "bradbury_chain_id": 4221,
+    "bradbury_writes": false
+  }
+}

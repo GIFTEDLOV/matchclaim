@@ -1,0 +1,19 @@
+{
+  "authorized_credit_minor": 2500,
+  "bradbury_proof": false,
+  "chain_id": 61127,
+  "consensus_status": "FINALIZED",
+  "consensus_votes": [
+    "agree",
+    "agree",
+    "agree"
+  ],
+  "interpretation": "Production-shaped local consensus only; mocked local handlers, not Bradbury proof.",
+  "max_rotations": 2,
+  "model_path_executions": 4,
+  "runtime": "glsim",
+  "studionet_used": false,
+  "validators": 3,
+  "verdict": "MATCH_ELIGIBLE",
+  "web_path_executions": 4
+}
