@@ -4,6 +4,7 @@
   "genlayer_test": "0.29.2",
   "genlayer_py": "0.16.3",
   "genvm_linter": "0.11.0",
+  "direct_test_runtime": "v0.2.16",
   "genvm_validation_bundle": "v0.3.0-rc7",
   "contract_dependency": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6",
   "local_consensus_runtime": "glsim from genlayer-test 0.29.2",

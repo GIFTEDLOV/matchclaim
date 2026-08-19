@@ -8,10 +8,14 @@ CONTRACT = "contracts/matchclaim.py"
 HOST = "competitor.example"
 URL = "https://competitor.example/product"
 POLICY_TEXT = "Same product, same condition, public purchasable offer, same currency; no member-only price."
+# genlayer-test 0.29.2's contract dependency is packaged in this published
+# Direct Mode runtime. The newer rc7 release publishes platform-specific
+# archives, not the universal archive that genlayer-test currently requests.
+DIRECT_SDK_VERSION = "v0.2.16"
 
 
 def _setup(direct_vm, direct_deploy, direct_owner, direct_alice):
-    contract = direct_deploy(CONTRACT)
+    contract = direct_deploy(CONTRACT, sdk_version=DIRECT_SDK_VERSION)
     direct_vm.sender = direct_owner
     contract.create_policy("policy-1", "Acme Retail", POLICY_TEXT, [HOST], True, False)
     contract.register_purchase(
@@ -52,7 +56,7 @@ def test_policy_purchase_and_views_are_authoritative(direct_vm, direct_deploy, d
 
 
 def test_merchant_only_registration_and_duplicate_ids(direct_vm, direct_deploy, direct_owner, direct_alice, direct_bob):
-    contract = direct_deploy(CONTRACT)
+    contract = direct_deploy(CONTRACT, sdk_version=DIRECT_SDK_VERSION)
     direct_vm.sender = direct_owner
     contract.create_policy("policy-1", "Acme", "rules", [HOST], True, False)
     with direct_vm.expect_revert("policy_id already exists"):
