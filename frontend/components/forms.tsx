@@ -93,7 +93,7 @@ export function PurchaseForm() {
     const idError = validateId(form.id, "Purchase ID");
     const buyerError = isAddress(form.buyerAddress) ? null : "Enter a valid 20-byte buyer wallet address";
     const conditionError = validateCondition(form.condition) ? null : "Choose NEW or REFURBISHED";
-    let priceMinor = 0;
+    let priceMinor = 0n;
     try { priceMinor = parseMinorUnits(form.price); } catch (cause) { setError(cause instanceof Error ? cause.message : "Invalid price"); return; }
     if (idError || buyerError || conditionError || !form.policyId.trim() || !form.title.trim() || !form.manufacturer.trim() || !form.model.trim() || !form.sku.trim() || !/^[A-Z]{3}$/.test(form.currency)) {
       setError(idError ?? buyerError ?? conditionError ?? "Complete every purchase field using the expected format.");
@@ -213,6 +213,6 @@ export function ClaimResultSummary({ assessment }: { assessment: ClaimAssessment
   return <div className={`verdict-card ${presentation.tone === "caution" ? "caution" : presentation.tone === "neutral" ? "neutral" : ""}`}><p className="eyebrow">Contract assessment</p><h2>{presentation.label}</h2><p>{presentation.description}</p><p className="field-help">{formatMinorUnits(assessment.competitor_price_minor, assessment.currency)} observed competitor price</p></div>;
 }
 
-export function AuthorizationLookup({ authorization }: { authorization: { authorization_id: string; authorized_credit_minor: number; currency: string } }) {
+export function AuthorizationLookup({ authorization }: { authorization: { authorization_id: string; authorized_credit_minor: bigint; currency: string } }) {
   return <div className="authorization-banner"><p className="eyebrow">Permanent contract result</p><h2>Verified price-match credit</h2><p>{formatMinorUnits(authorization.authorized_credit_minor, authorization.currency)} authorized under {authorization.authorization_id}.</p></div>;
 }
