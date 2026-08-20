@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { CONTRACT_METHOD_MATRIX, writeAssessPriceMatch, writeCreatePolicy, writeRegisterPurchase } from "@/lib/client";
+import { CONTRACT_METHOD_MATRIX, readPurchase, writeAssessPriceMatch, writeCreatePolicy, writeRegisterPurchase } from "@/lib/client";
 import { ExecutionResult } from "@/lib/client";
 import { reconcileTransaction, TransactionFailure } from "@/lib/transaction";
 import type { PendingTransaction } from "@/lib/pending";
@@ -18,7 +18,7 @@ describe("transaction safety", () => {
     const calls: unknown[] = [];
     const fake = { writeContract: async (args: unknown) => { calls.push(args); return "0xabc"; } };
     await writeCreatePolicy(fake as never, ["p", "Merchant", "Rules", ["shop.example"], true, false]);
-    await writeRegisterPurchase(fake as never, ["purchase", "p", "0x2222222222222222222222222222222222222222", "Phone", "Maker", "M1", "SKU", "NEW", 100, "USD"]);
+    await writeRegisterPurchase(fake as never, ["purchase", "p", "0x2222222222222222222222222222222222222222", "Phone", "Maker", "M1", "SKU", "NEW", 100n, "USD"]);
     await writeAssessPriceMatch(fake as never, ["purchase", "assessment", "https://shop.example/item"]);
     expect((calls[0] as { functionName: string; args: unknown[] }).functionName).toBe("create_policy");
     expect((calls[1] as { functionName: string; args: unknown[] }).args[2]).toBe("0x2222222222222222222222222222222222222222");
@@ -39,5 +39,29 @@ describe("transaction safety", () => {
 
   it("keeps infrastructure failure separate from business verdict", () => {
     expect(new TransactionFailure("UNDETERMINED", "x").code).toBe("UNDETERMINED");
+  });
+
+  it.each([
+    ["UNDETERMINED", "UNDETERMINED"],
+    ["VALIDATORS_TIMEOUT", "TIMEOUT"],
+    ["LEADER_TIMEOUT", "TIMEOUT"],
+    ["CANCELED", "CANCELED"],
+  ] as const)("maps %s using its actual SDK status", async (statusName, expectedCode) => {
+    const client = { getTransaction: async () => ({ statusName }) };
+    await expect(reconcileTransaction({ client: client as never, record, verifyPostcondition: async () => true, intervalMs: 0, maxPolls: 1 }))
+      .rejects.toMatchObject({ code: expectedCode });
+  });
+
+  it.each(["DISAGREE", "MAJORITY_DISAGREE", "NO_MAJORITY"] as const)("maps explicit SDK result %s to DISAGREE", async (resultName) => {
+    const client = { getTransaction: async () => ({ statusName: "FINALIZED", resultName }) };
+    await expect(reconcileTransaction({ client: client as never, record, verifyPostcondition: async () => true, intervalMs: 0, maxPolls: 1 }))
+      .rejects.toMatchObject({ code: "DISAGREE" });
+  });
+
+  it("normalizes the SDK's number/string-safe read boundary to bigint money", async () => {
+    process.env.NEXT_PUBLIC_CONTRACT_ADDRESS = "0x1111111111111111111111111111111111111111";
+    const fake = { readContract: async () => ({ paid_price_minor: "9007199254740992", purchase_id: "p" }) };
+    const purchase = await readPurchase(fake as never, "p");
+    expect(purchase.paid_price_minor).toBe(9007199254740992n);
   });
 });

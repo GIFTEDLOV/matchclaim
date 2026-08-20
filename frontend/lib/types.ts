@@ -22,7 +22,7 @@ export interface Purchase {
   model_number: string;
   sku: string;
   product_condition: Condition;
-  paid_price_minor: number;
+  paid_price_minor: bigint;
   currency: string;
   purchase_digest: string;
   claim_assessed: boolean;
@@ -36,8 +36,8 @@ export interface ClaimAssessment {
   purchase_id: string;
   competitor_url: string;
   verdict: Verdict;
-  competitor_price_minor: number;
-  authorized_credit_minor: number;
+  competitor_price_minor: bigint;
+  authorized_credit_minor: bigint;
   currency: string;
   result_digest: string;
   assessment_digest: string;
@@ -47,9 +47,9 @@ export interface PriceMatchAuthorization {
   authorization_id: string;
   purchase_id: string;
   assessment_id: string;
-  original_price_minor: number;
-  competitor_price_minor: number;
-  authorized_credit_minor: number;
+  original_price_minor: bigint;
+  competitor_price_minor: bigint;
+  authorized_credit_minor: bigint;
   currency: string;
   result_digest: string;
   authorization_digest: string;
@@ -68,7 +68,7 @@ export interface ContractInfo {
   max_host_length: number;
   max_url_length: number;
   max_page_text_length: number;
-  max_price_minor: number;
+  max_price_minor: bigint;
 }
 
 export type WriteOperation =

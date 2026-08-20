@@ -2,7 +2,7 @@
 
 ## Product
 
-MatchClaim is a GenLayer Intelligent Contract for retailer price-match claims. A merchant commits immutable price-match rules and approved competitor hostnames, registers an authenticated purchase baseline, and allows only the registered buyer to submit one public HTTPS competitor URL. GenLayer validators independently retrieve and interpret the page. An eligible result creates a permanent on-chain `PriceMatchAuthorization` with a deterministic minor-unit credit.
+MatchClaim is a complete GenLayer application for retailer price-match claims. Its Intelligent Contract is the consensus and adjudication core: a merchant commits immutable price-match rules and approved competitor hostnames, registers an authenticated purchase baseline, and allows only the registered buyer to submit one public HTTPS competitor URL. GenLayer validators independently retrieve and interpret the page. An eligible result creates a permanent on-chain `PriceMatchAuthorization` with a deterministic minor-unit credit.
 
 V1 is intentionally limited to retailer price-match claims between a merchant and a buyer. It has no uploaded evidence, private evidence, screenshots, OCR, admin override, deletion, or policy edit. The completed frontend assists the workflow and displays contract state; it does not decide claims.
 

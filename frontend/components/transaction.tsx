@@ -26,6 +26,7 @@ const failureLabels: Record<TransactionFailureCode, string> = {
   TIMEOUT: "TIMEOUT",
   DISAGREE: "DISAGREE",
   UNDETERMINED: "UNDETERMINED",
+  CANCELED: "Canceled",
   EXECUTION_FAILED: "Execution failed",
   CONTRACT_PRECONDITION: "Contract precondition failed",
   MALFORMED_RESULT: "Malformed or error result",
@@ -37,6 +38,7 @@ export function failureMessage(code: TransactionFailureCode): string {
   if (code === "EXECUTION_FAILED") return "The transaction finalized, but contract execution failed and state was not treated as successful.";
   if (code === "MISSING_EXPECTED_STATE") return "Execution succeeded, but the expected stored entity was not found. The UI did not mark the write complete.";
   if (code === "TIMEOUT") return "The same transaction hash is saved for recovery. Do not submit the write again.";
+  if (code === "CANCELED") return "The transaction was canceled. No business verdict was inferred.";
   return "The requested operation did not complete.";
 }
 

@@ -2,7 +2,7 @@ import type { WriteOperation } from "./types";
 
 export const PENDING_STORAGE_KEY = "matchclaim:pending:v1";
 
-export type PendingStatus = "SUBMITTED" | "CONFIRMING" | "TIMEOUT" | "UNDETERMINED" | "FAILED";
+export type PendingStatus = "SUBMITTED" | "CONFIRMING" | "TIMEOUT" | "UNDETERMINED" | "CANCELED" | "FAILED";
 
 export interface PendingTransaction {
   operation: WriteOperation;

@@ -93,18 +93,54 @@ async function read<T>(client: ReadClient, functionName: string, args: unknown[]
   })) as T;
 }
 
+function toMoney(value: unknown, field: string): bigint {
+  if (typeof value === "bigint") return value;
+  if (typeof value === "number" && Number.isSafeInteger(value)) return BigInt(value);
+  if (typeof value === "string" && /^\d+$/.test(value)) return BigInt(value);
+  throw new Error(`Invalid monetary value returned for ${field}`);
+}
+
+function normalizePurchase(value: unknown): Purchase {
+  const purchase = value as Purchase;
+  return { ...purchase, paid_price_minor: toMoney(purchase.paid_price_minor, "paid_price_minor") };
+}
+
+function normalizeAssessment(value: unknown): ClaimAssessment {
+  const assessment = value as ClaimAssessment;
+  return {
+    ...assessment,
+    competitor_price_minor: toMoney(assessment.competitor_price_minor, "competitor_price_minor"),
+    authorized_credit_minor: toMoney(assessment.authorized_credit_minor, "authorized_credit_minor"),
+  };
+}
+
+function normalizeAuthorization(value: unknown): PriceMatchAuthorization {
+  const authorization = value as PriceMatchAuthorization;
+  return {
+    ...authorization,
+    original_price_minor: toMoney(authorization.original_price_minor, "original_price_minor"),
+    competitor_price_minor: toMoney(authorization.competitor_price_minor, "competitor_price_minor"),
+    authorized_credit_minor: toMoney(authorization.authorized_credit_minor, "authorized_credit_minor"),
+  };
+}
+
+function normalizeContractInfo(value: unknown): ContractInfo {
+  const info = value as ContractInfo;
+  return { ...info, max_price_minor: toMoney(info.max_price_minor, "max_price_minor") };
+}
+
 export const readPolicy = (client: ReadClient, id: string) =>
   read<MerchantPolicy>(client, CONTRACT_READS.getPolicy, [id]);
 export const readPurchase = (client: ReadClient, id: string) =>
-  read<Purchase>(client, CONTRACT_READS.getPurchase, [id]);
+  read<unknown>(client, CONTRACT_READS.getPurchase, [id]).then(normalizePurchase);
 export const readAssessment = (client: ReadClient, id: string) =>
-  read<ClaimAssessment>(client, CONTRACT_READS.getAssessment, [id]);
+  read<unknown>(client, CONTRACT_READS.getAssessment, [id]).then(normalizeAssessment);
 export const readAuthorization = (client: ReadClient, id: string) =>
-  read<PriceMatchAuthorization>(client, CONTRACT_READS.getAuthorization, [id]);
+  read<unknown>(client, CONTRACT_READS.getAuthorization, [id]).then(normalizeAuthorization);
 export const readPolicyIds = (client: ReadClient) => read<string[]>(client, CONTRACT_READS.getPolicyIds);
 export const readPurchaseIds = (client: ReadClient) => read<string[]>(client, CONTRACT_READS.getPurchaseIds);
 export const readAssessmentIds = (client: ReadClient) => read<string[]>(client, CONTRACT_READS.getAssessmentIds);
-export const readContractInfo = (client: ReadClient) => read<ContractInfo>(client, CONTRACT_READS.contractInfo);
+export const readContractInfo = (client: ReadClient) => read<unknown>(client, CONTRACT_READS.contractInfo).then(normalizeContractInfo);
 
 export function readClientForConfig(config = getConfig()): ReadClient {
   return createReadClient(config);
@@ -124,7 +160,7 @@ export async function writeCreatePolicy(
 
 export async function writeRegisterPurchase(
   client: ReadClient,
-  args: [string, string, string, string, string, string, string, string, number, string],
+  args: [string, string, string, string, string, string, string, string, bigint, string],
 ): Promise<string> {
   return (await client.writeContract({
     address: getConfig().contractAddress as Address,

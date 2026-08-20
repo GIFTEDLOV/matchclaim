@@ -17,7 +17,7 @@ function PendingRecovery() {
     if (!config.configured || !current.length) return;
     const client = createReadClient(config);
     let cancelled = false;
-    void Promise.all(current.filter((record) => record.status !== "FAILED").map(async (record) => {
+    void Promise.all(current.filter((record) => record.status !== "FAILED" && record.status !== "CANCELED").map(async (record) => {
       try {
         await reconcileTransaction({
           client,
@@ -33,7 +33,7 @@ function PendingRecovery() {
     return () => { cancelled = true; };
   }, []);
 
-  const visible = records.filter((record) => record.status !== "FAILED");
+  const visible = records.filter((record) => record.status !== "FAILED" && record.status !== "CANCELED");
   if (!visible.length) return null;
   return (
     <div className="pending-banner" role="status">

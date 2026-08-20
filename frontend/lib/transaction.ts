@@ -25,6 +25,7 @@ export type TransactionFailureCode =
   | "TIMEOUT"
   | "DISAGREE"
   | "UNDETERMINED"
+  | "CANCELED"
   | "EXECUTION_FAILED"
   | "CONTRACT_PRECONDITION"
   | "MALFORMED_RESULT"
@@ -51,6 +52,14 @@ const terminalFailureStatuses = new Set([
   TransactionStatus.VALIDATORS_TIMEOUT,
   TransactionStatus.LEADER_TIMEOUT,
 ]);
+
+const explicitDisagreementResults = new Set(["DISAGREE", "MAJORITY_DISAGREE", "NO_MAJORITY"]);
+
+function hasExplicitDisagreementResult(transaction: unknown): boolean {
+  if (!transaction || typeof transaction !== "object") return false;
+  const resultName = (transaction as { resultName?: unknown }).resultName;
+  return typeof resultName === "string" && explicitDisagreementResults.has(resultName);
+}
 
 function classifyError(error: unknown): TransactionFailure {
   const message = error instanceof Error ? error.message : String(error);
@@ -110,12 +119,25 @@ export async function reconcileTransaction(options: ReconcileOptions): Promise<v
     }
     const statusName = tx.statusName ?? String(tx.status ?? "");
     onProgress?.({ state: statusToProgress(statusName), txHash: record.txHash, statusName });
-    if (terminalFailureStatuses.has(statusName as never)) {
-      const code = statusName === TransactionStatus.UNDETERMINED ? "DISAGREE" : "UNDETERMINED";
+    if (statusName === TransactionStatus.UNDETERMINED) {
+      updatePendingStatus(record.txHash, "UNDETERMINED");
+      throw new TransactionFailure("UNDETERMINED", "The network did not resolve the transaction. No business verdict was inferred.");
+    }
+    if (statusName === TransactionStatus.VALIDATORS_TIMEOUT || statusName === TransactionStatus.LEADER_TIMEOUT) {
+      updatePendingStatus(record.txHash, "TIMEOUT");
+      throw new TransactionFailure("TIMEOUT", `The transaction ended in ${statusName}. The same hash remains the recovery record.`);
+    }
+    if (statusName === TransactionStatus.CANCELED) {
+      updatePendingStatus(record.txHash, "CANCELED");
+      throw new TransactionFailure("CANCELED", "The transaction was canceled. No business verdict was inferred.");
+    }
+    if (hasExplicitDisagreementResult(tx) && statusName !== TransactionStatus.UNDETERMINED) {
       updatePendingStatus(record.txHash, "FAILED");
-      throw new TransactionFailure(code, statusName === TransactionStatus.UNDETERMINED
-        ? "Validators did not reach a business result. No verdict was recorded."
-        : `The transaction ended in ${statusName}.`);
+      throw new TransactionFailure("DISAGREE", "Validators explicitly reported disagreement. No business verdict was recorded.");
+    }
+    if (terminalFailureStatuses.has(statusName as never)) {
+      updatePendingStatus(record.txHash, "FAILED");
+      throw new TransactionFailure("UNDETERMINED", `The transaction ended in ${statusName}. No business verdict was inferred.`);
     }
     if (statusName === TransactionStatus.FINALIZED) {
       onProgress?.({ state: "VERIFYING", txHash: record.txHash, statusName });
