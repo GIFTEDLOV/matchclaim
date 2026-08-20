@@ -112,7 +112,7 @@ export async function reconcileTransaction(options: ReconcileOptions): Promise<v
     onProgress?.({ state: statusToProgress(statusName), txHash: record.txHash, statusName });
     if (terminalFailureStatuses.has(statusName as never)) {
       const code = statusName === TransactionStatus.UNDETERMINED ? "DISAGREE" : "UNDETERMINED";
-      updatePendingStatus(record.txHash, code === "DISAGREE" ? "FAILED" : "UNDETERMINED");
+      updatePendingStatus(record.txHash, "FAILED");
       throw new TransactionFailure(code, statusName === TransactionStatus.UNDETERMINED
         ? "Validators did not reach a business result. No verdict was recorded."
         : `The transaction ended in ${statusName}.`);

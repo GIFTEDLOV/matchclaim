@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createReadClient, createWriteClient } from "@/lib/client";
 import { getConfig } from "@/lib/config";
-import { broadcastOnceAndReconcile, type TransactionFailureCode, type TransactionProgress } from "@/lib/transaction";
+import { broadcastOnceAndReconcile, TransactionFailure, type TransactionFailureCode, type TransactionProgress } from "@/lib/transaction";
 import type { WriteOperation } from "@/lib/types";
 import { Button, Card } from "./ui";
 import { useWallet } from "./wallet";
@@ -87,7 +87,8 @@ export function useContractTransaction() {
     } catch (cause) {
       const message = cause instanceof Error ? cause.message : "Transaction failed";
       setError(message);
-      if (!progress || progress.state !== "FAILED") setProgress({ state: "FAILED", message });
+      const failureCode = cause instanceof TransactionFailure ? cause.code : undefined;
+      setProgress({ state: "FAILED", failureCode, message });
       return null;
     }
   }
