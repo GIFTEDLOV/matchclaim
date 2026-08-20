@@ -4,7 +4,7 @@
 
 MatchClaim is a GenLayer Intelligent Contract for retailer price-match claims. A merchant commits immutable price-match rules and approved competitor hostnames, registers an authenticated purchase baseline, and allows only the registered buyer to submit one public HTTPS competitor URL. GenLayer validators independently retrieve and interpret the page. An eligible result creates a permanent on-chain `PriceMatchAuthorization` with a deterministic minor-unit credit.
 
-V1 is intentionally limited to retailer price-match claims between a merchant and a buyer. It has no uploaded evidence, private evidence, screenshots, OCR, admin override, deletion, policy edit, or frontend.
+V1 is intentionally limited to retailer price-match claims between a merchant and a buyer. It has no uploaded evidence, private evidence, screenshots, OCR, admin override, deletion, or policy edit. The completed frontend assists the workflow and displays contract state; it does not decide claims.
 
 ## Problem
 
@@ -57,6 +57,27 @@ genvm-lint check contracts/matchclaim.py --json
 python tools/production_shaped_test.py
 ```
 
+### Frontend workflow
+
+The Next.js frontend lives in `frontend/` and uses GenLayerJS for direct public reads and connected-wallet writes. It provides:
+
+- a merchant workspace for policy creation, purchase registration, and record inspection;
+- a buyer route for reading a registered purchase and submitting a competitor URL;
+- assessment and authorization detail pages; and
+- a public authorization verifier.
+
+Run the local UI with a real contract configuration:
+
+```powershell
+cd frontend
+Copy-Item .env.example .env.local
+# Fill .env.local with a real public RPC, network metadata, and deployed address.
+npm install
+npm run dev
+```
+
+The UI fails closed with `MatchClaim contract is not configured` when the contract address or public GenLayer settings are absent. It never injects demo chain records. Every write persists its transaction hash under `matchclaim:pending:v1`, reconciles that same hash through finality, checks execution success, and verifies the expected stored state before showing completion.
+
 The independent digest reproducer takes fields in fixed canonical order. For example:
 
 ```powershell
@@ -65,9 +86,9 @@ python tools/reproduce_digest.py --tag result --fields-json '["MATCH_ELIGIBLE",7
 
 ## Live proof
 
-The Phase 4 proof is a GLSim production-shaped local consensus run with three validator executions, independently invoked web/model paths, and local deterministic handlers. It is recorded in `artifacts/production-shaped-local.json`.
+The Phase 4 proof is a GLSim production-shaped local consensus run with three validator executions, independently invoked web/model paths, and local deterministic handlers. It is recorded in `artifacts/production-shaped-local.json`. The frontend is wired to the real GenLayerJS client but has no public deployment address in this repository.
 
-Bradbury proof not yet performed. Local execution and GLSim are not Bradbury proof. Studionet is not used.
+Bradbury proof not yet performed. Bradbury proof pending Phase 7. Local execution and GLSim are not Bradbury proof. Studionet is not used.
 
 ## Security/trust model
 
@@ -90,11 +111,15 @@ Only `MATCH_ELIGIBLE` may carry a positive price, and it must be strictly lower 
 - Exact numeric price consensus may fail for dynamic pages. MatchClaim intentionally has no money tolerance.
 - V1 does not handle private evidence, uploads, images, screenshots, OCR, seller identity beyond committed policy interpretation, time windows, refunds, or payment settlement.
 - A successful semantic assessment is historical. Reassessment is allowed only after `NOT_ELIGIBLE` or `INCONCLUSIVE`, with a new assessment ID. Authorization permanently closes that purchase.
-- Bradbury deployment, transaction finality proof, frontend, Vercel, screenshots, and Portal submission are outside this phase.
+- Bradbury deployment and transaction finality proof are pending Phase 7. Vercel, screenshots, and Portal submission are not performed here.
 
 ## Developer/API detail
 
 Contract source: `contracts/matchclaim.py`. Pure rules and canonical serialization: `contracts/matchclaim_core.py`.
+
+Frontend client: `frontend/lib/client.ts`. The client matrix is exported as `CONTRACT_METHOD_MATRIX` and binds every frontend action to the frozen method name, argument order, precondition, and expected postcondition. UI money entry is converted from a two-decimal string into integer minor units without floating-point arithmetic.
+
+Frontend routes: `/`, `/merchant`, `/merchant/policies/new`, `/merchant/purchases/new`, `/policies/[id]`, `/purchases/[id]`, `/claim/find`, `/claim/[purchaseId]`, `/assessments/[id]`, `/verify`, and `/verify/[id]`.
 
 Public writes:
 
