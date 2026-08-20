@@ -37,12 +37,27 @@
     "initial_validators": 3,
     "validator_votes": ["AGREE", "AGREE", "AGREE", "AGREE", "AGREE"]
   },
-  "policy_id": "",
-  "policy_tx": null,
-  "policy_status": "PENDING",
-  "policy_execution": null,
-  "policy_digest": null,
-  "policy_digest_match": null,
+  "policy_id": "mc_br_policy_20260820",
+  "policy_tx": "0x3eead368d36820aeb9e0ab71f23f74a83c29e3d475eba7c5f2bf36cd06126adf",
+  "policy_status": "ACCEPTED",
+  "policy_execution": "FINISHED_WITH_RETURN",
+  "policy_digest": "f7570f4ed693f18e1a6c9bb608ad2ceb539be62d89a247e6fa850b608fcb4bf7",
+  "policy_digest_match": true,
+  "policy_validator_observations": {
+    "status_observed": "ACCEPTED",
+    "result_name": "AGREE",
+    "validator_votes": ["AGREE", "AGREE", "AGREE", "AGREE", "AGREE"]
+  },
+  "policy_attempt_history": [
+    {
+      "tx": "0x06663bacba26a6798cb4256b22c9e05237df797a19d5ec0f7eb1b525265cfa82",
+      "status_observed": "ACCEPTED",
+      "result_name": "AGREE",
+      "execution": "FINISHED_WITH_ERROR",
+      "validator_votes": ["DISAGREE", "DISAGREE", "DISAGREE", "DISAGREE", "DISAGREE"],
+      "trace_error": "approved_competitor_hosts must be a bounded sequence; Windows native argument transport stripped JSON string quotes."
+    }
+  ],
   "purchase_id": "",
   "purchase_tx": null,
   "purchase_status": "PENDING",
