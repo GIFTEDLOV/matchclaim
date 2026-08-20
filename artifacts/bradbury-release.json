@@ -27,11 +27,16 @@
     "source_note": "Public Walmart page; displayed offer is a marketplace fulfillment path."
   },
   "fixture_disclosure": "The Bradbury purchase baseline is synthetic technical test data matched to the public Walmart listing; it is not a claim about an actual commercial purchase.",
-  "deployment_tx": null,
-  "contract_address": null,
-  "deployment_status": "PENDING",
-  "deployment_execution": null,
-  "deployment_validator_observations": null,
+  "deployment_tx": "0xc4bb9f5dc7d61ee94077cb78a55e41aa9520d32896af5458d7a58cae9483c371",
+  "contract_address": "0x3015dB2DD3fEdAff566c0F23Bb42BA34C45025f1",
+  "deployment_status": "FINALIZED",
+  "deployment_execution": "FINISHED_WITH_RETURN",
+  "deployment_validator_observations": {
+    "status_observed": "FINALIZED",
+    "result_name": "AGREE",
+    "initial_validators": 3,
+    "validator_votes": ["AGREE", "AGREE", "AGREE", "AGREE", "AGREE"]
+  },
   "policy_id": "",
   "policy_tx": null,
   "policy_status": "PENDING",
