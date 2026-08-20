@@ -10,12 +10,14 @@
   "genlayer_js_version": "1.1.8",
   "account": "0xe0f17bef0587c3b66d2eb4bbe705dff821abdde7",
   "balance_before": "2.188392893773656953 GEN",
-  "evidence_url": "https://www.walmart.com/ip/5257266150",
+  "evidence_url": "https://walmart.com/ip/5257266150",
   "evidence_host": "walmart.com",
   "evidence_http": {
     "attempts": 3,
     "status": 200,
     "materially_stable": true,
+    "exact_input_host": "walmart.com",
+    "redirected_final_url": "https://www.walmart.com/ip/Poly-Edge-E320-IP-Phone-Corded-Corded-Bluetooth-Desktop-Wall-Mountable-Black-VoIP-2-x-Network-RJ-45-PoE-Ports/5257266150",
     "observed_product": "Poly Edge E320 IP Phone Corded Bluetooth Desktop Wall Mountable Black 89B52AA",
     "manufacturer": "Plantronics",
     "model_or_mpn": "89B52AAABA",
@@ -39,12 +41,12 @@
   },
   "policy_id": "mc_br_policy_20260820",
   "policy_tx": "0x3eead368d36820aeb9e0ab71f23f74a83c29e3d475eba7c5f2bf36cd06126adf",
-  "policy_status": "ACCEPTED",
+  "policy_status": "FINALIZED",
   "policy_execution": "FINISHED_WITH_RETURN",
   "policy_digest": "f7570f4ed693f18e1a6c9bb608ad2ceb539be62d89a247e6fa850b608fcb4bf7",
   "policy_digest_match": true,
   "policy_validator_observations": {
-    "status_observed": "ACCEPTED",
+    "status_observed": "FINALIZED",
     "result_name": "AGREE",
     "validator_votes": ["AGREE", "AGREE", "AGREE", "AGREE", "AGREE"]
   },
@@ -58,16 +60,37 @@
       "trace_error": "approved_competitor_hosts must be a bounded sequence; Windows native argument transport stripped JSON string quotes."
     }
   ],
-  "purchase_id": "",
-  "purchase_tx": null,
-  "purchase_status": "PENDING",
-  "purchase_execution": null,
-  "purchase_digest": null,
-  "purchase_digest_match": null,
-  "assessment_id": "",
+  "purchase_id": "mc_br_purchase_20260820",
+  "purchase_tx": "0x64712938657d3ef0a28f4272456eb5eeea36bef7cf6952a1162eee68a00fa72a",
+  "purchase_status": "FINALIZED",
+  "purchase_execution": "FINISHED_WITH_RETURN",
+  "purchase_digest": "e0b1a48a0cbbca0b8047bd23f6e11e8a8c5574b056c8b17e8bac0082c5326c8f",
+  "purchase_digest_match": true,
+  "purchase_validator_observations": {
+    "status_observed": "FINALIZED",
+    "result_name": "AGREE",
+    "validator_votes": ["AGREE", "AGREE", "AGREE", "AGREE", "AGREE"]
+  },
+  "purchase_attempt_history": [
+    {
+      "tx": "0xd0a9d56c8063833b6c5c63dab6466315407d3cc06bdc843f6386137cd57024dc",
+      "status_observed": "ACCEPTED",
+      "result_name": "AGREE",
+      "execution": "FINISHED_WITH_ERROR",
+      "validator_votes": ["DISAGREE", "DISAGREE", "DISAGREE", "DISAGREE", "DISAGREE"]
+    },
+    {
+      "tx": "0x64712938657d3ef0a28f4272456eb5eeea36bef7cf6952a1162eee68a00fa72a",
+      "status_observed": "ACCEPTED",
+      "result_name": "AGREE",
+      "execution": "FINISHED_WITH_RETURN",
+      "validator_votes": ["AGREE", "AGREE", "AGREE", "AGREE", "AGREE"]
+    }
+  ],
+  "assessment_id": "mc_br_assess_20260820",
   "assessment_tx": null,
-  "assessment_status": "PENDING",
-  "assessment_execution": null,
+  "assessment_status": "RPC_REJECTED_BEFORE_BROADCAST",
+  "assessment_execution": "NOT_SUBMITTED",
   "actual_verdict": null,
   "actual_validator_observations": null,
   "competitor_price_minor": null,
@@ -79,10 +102,27 @@
   "authorization_id": null,
   "authorization_digest": null,
   "authorization_digest_match": null,
-  "balance_after": null,
+  "balance_after": "2.184961163975026853 GEN",
+  "assessment_attempt_history": [
+    {
+      "tx": null,
+      "status_observed": "NOT_SUBMITTED",
+      "execution": "NOT_SUBMITTED",
+      "error": "Bradbury RPC rejected eth_sendRawTransaction with -32005 transaction gas rate limit exceeded; no hash returned.",
+      "nonce_unchanged": true
+    },
+    {
+      "tx": null,
+      "status_observed": "NOT_SUBMITTED",
+      "execution": "NOT_SUBMITTED",
+      "error": "Second submission after read-only reconciliation was rejected by the same Bradbury gas-rate capacity limit; no hash returned.",
+      "nonce_unchanged": true
+    }
+  ],
   "limitations": [
     "Consensus proves agreement about interpretation; it does not authenticate the web evidence.",
     "The public page and price may change after this read-only reconnaissance.",
-    "This is one representative Bradbury test fixture, not a production customer claim."
+    "This is one representative Bradbury test fixture, not a production customer claim.",
+    "The semantic assessment could not be submitted because Bradbury rejected both raw transaction submissions at the RPC capacity boundary; no assessment hash or business verdict exists."
   ]
 }

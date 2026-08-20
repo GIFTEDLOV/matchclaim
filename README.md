@@ -86,9 +86,9 @@ python tools/reproduce_digest.py --tag result --fields-json '["MATCH_ELIGIBLE",7
 
 ## Live proof
 
-The Phase 4 proof is a GLSim production-shaped local consensus run with three validator executions, independently invoked web/model paths, and local deterministic handlers. It is recorded in `artifacts/production-shaped-local.json`. The frontend is wired to the real GenLayerJS client but has no public deployment address in this repository.
+The Phase 4 proof is a GLSim production-shaped local consensus run with three validator executions, independently invoked web/model paths, and local deterministic handlers. It is recorded in `artifacts/production-shaped-local.json`. Local execution and GLSim are not Bradbury proof. Studionet is not used.
 
-Bradbury proof not yet performed. Bradbury proof pending Phase 7. Local execution and GLSim are not Bradbury proof. Studionet is not used.
+Bradbury release work reached a finalized contract deployment, policy, and synthetic purchase fixture. The single semantic assessment was not submitted: Bradbury rejected the raw transaction at its gas-rate capacity boundary before returning a hash, and read-only reconciliation confirmed no assessment state or pending nonce. The complete evidence is recorded in `artifacts/bradbury-release.json`. No Bradbury business verdict or authorization is claimed. Bradbury proof pending Phase 7.
 
 ## Security/trust model
 
@@ -111,7 +111,7 @@ Only `MATCH_ELIGIBLE` may carry a positive price, and it must be strictly lower 
 - Exact numeric price consensus may fail for dynamic pages. MatchClaim intentionally has no money tolerance.
 - V1 does not handle private evidence, uploads, images, screenshots, OCR, seller identity beyond committed policy interpretation, time windows, refunds, or payment settlement.
 - A successful semantic assessment is historical. Reassessment is allowed only after `NOT_ELIGIBLE` or `INCONCLUSIVE`, with a new assessment ID. Authorization permanently closes that purchase.
-- Bradbury deployment and transaction finality proof are pending Phase 7. Vercel, screenshots, and Portal submission are not performed here.
+- The Bradbury contract, policy, and synthetic purchase fixture are finalized, but the semantic assessment remains blocked by Bradbury RPC capacity. Therefore there is no Bradbury verdict or authorization proof. Vercel, screenshots, and Portal submission are not performed here.
 
 ## Developer/API detail
 
@@ -138,4 +138,4 @@ Public views:
 - `get_assessment_ids()`
 - `contract_info()`
 
-Current local versions observed: Python 3.14.3, GenLayer CLI 0.39.1, `genlayer-test` 0.29.2, `genlayer-py` 0.16.3, and the contract’s current `py-genlayer` dependency header. The Bradbury configuration for a later phase is RPC `https://rpc-bradbury.genlayer.com`, chain `4221`; no Bradbury write is performed here.
+Current local versions observed: Python 3.14.3, GenLayer CLI 0.39.1, `genlayer-test` 0.29.2, `genlayer-py` 0.16.3, and the contract’s current `py-genlayer` dependency header. The Bradbury configuration used for the release attempt is RPC `https://rpc-bradbury.genlayer.com`, chain `4221`; deployment, policy, and purchase writes are recorded in the proof artifact, while no semantic assessment write was accepted.
