@@ -88,21 +88,32 @@
     }
   ],
   "assessment_id": "mc_br_assess_20260820",
-  "assessment_tx": null,
-  "assessment_status": "RPC_REJECTED_BEFORE_BROADCAST",
-  "assessment_execution": "NOT_SUBMITTED",
+  "assessment_tx": "0x9afdddb7ec37aa1e193b816a5ae5be1ad2cde7862a20202d8179a7d9d449e969",
+  "assessment_status": "NON_TERMINAL_APPEAL_RECONCILIATION_TIMEOUT",
+  "assessment_execution": "FINISHED_WITH_RETURN",
   "actual_verdict": null,
-  "actual_validator_observations": null,
+  "actual_validator_observations": {
+    "status_observed": "APPEAL_REVEALING",
+    "result_name": "IDLE",
+    "execution": "FINISHED_WITH_RETURN",
+    "num_of_rounds": "3",
+    "round": "3",
+    "rotations_left": "3",
+    "votes_committed": 11,
+    "votes_revealed": 10,
+    "validator_votes": ["AGREE", "AGREE", "AGREE", "TIMEOUT", "DETERMINISTIC_VIOLATION", "AGREE", "AGREE", "TIMEOUT", "TIMEOUT", "NOT_VOTED", "TIMEOUT"],
+    "receipt_reconciliation": "The same hash was polled to FINALIZED; the watcher timed out while the transaction remained APPEAL_REVEALING. No terminal receipt or stored assessment was available."
+  },
   "competitor_price_minor": null,
   "authorized_credit_minor": null,
   "result_digest": null,
   "assessment_digest": null,
   "assessment_digest_match": null,
-  "authorization_present": null,
+  "authorization_present": false,
   "authorization_id": null,
   "authorization_digest": null,
   "authorization_digest_match": null,
-  "balance_after": "2.184961163975026853 GEN",
+  "balance_after": "2.184848242634689853 GEN",
   "assessment_attempt_history": [
     {
       "tx": null,
@@ -117,12 +128,25 @@
       "execution": "NOT_SUBMITTED",
       "error": "Second submission after read-only reconciliation was rejected by the same Bradbury gas-rate capacity limit; no hash returned.",
       "nonce_unchanged": true
+    },
+    {
+      "tx": "0x9afdddb7ec37aa1e193b816a5ae5be1ad2cde7862a20202d8179a7d9d449e969",
+      "status_observed": "APPEAL_REVEALING",
+      "result_name": "IDLE",
+      "execution": "FINISHED_WITH_RETURN",
+      "num_of_rounds": "3",
+      "round": "3",
+      "rotations_left": "3",
+      "votes_committed": 11,
+      "votes_revealed": 10,
+      "validator_votes": ["AGREE", "AGREE", "AGREE", "TIMEOUT", "DETERMINISTIC_VIOLATION", "AGREE", "AGREE", "TIMEOUT", "TIMEOUT", "NOT_VOTED", "TIMEOUT"],
+      "receipt_reconciliation": "Same-hash receipt polling timed out before FINALIZED; no rebroadcast was made."
     }
   ],
   "limitations": [
     "Consensus proves agreement about interpretation; it does not authenticate the web evidence.",
     "The public page and price may change after this read-only reconnaissance.",
     "This is one representative Bradbury test fixture, not a production customer claim.",
-    "The semantic assessment could not be submitted because Bradbury rejected both raw transaction submissions at the RPC capacity boundary; no assessment hash or business verdict exists."
+    "The semantic assessment submission returned one hash, but Bradbury did not reach FINALIZED during same-hash reconciliation; no stored ClaimAssessment or business verdict exists."
   ]
 }
