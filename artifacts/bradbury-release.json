@@ -89,11 +89,19 @@
   ],
   "assessment_id": "mc_br_assess_20260820",
   "assessment_tx": "0x9afdddb7ec37aa1e193b816a5ae5be1ad2cde7862a20202d8179a7d9d449e969",
-  "assessment_status": "NON_TERMINAL_APPEAL_RECONCILIATION_TIMEOUT",
+  "assessment_status": "FINALIZED",
   "assessment_execution": "FINISHED_WITH_RETURN",
-  "actual_verdict": null,
+  "assessment_tx_execution_hash": "0xdf8bcf2f56268cf944dbf46a66923be57e364efe194e306136a91960f924b37f",
+  "assessment_tx_calldata": "0xf878b8751604617267731dbc016d635f62725f70757263686173655f3230323630383230ac016d635f62725f6173736573735f32303236303832308c0268747470733a2f2f77616c6d6172742e636f6d2f69702f35323537323636313530066d6574686f6494016173736573735f70726963655f6d6174636800",
+  "assessment_read_state_block_range": {
+    "activation_block": "18337865",
+    "processing_block": "18337881",
+    "proposal_block": "18337883"
+  },
+  "actual_verdict": "INCONCLUSIVE",
+  "actual_verdict_source": "The finalized execution trace/equivalence output returned INCONCLUSIVE with competitor_price_minor 0. The finalized contract read get_assessment did not expose a stored ClaimAssessment.",
   "actual_validator_observations": {
-    "status_observed": "APPEAL_REVEALING",
+    "status_observed": "FINALIZED",
     "result_name": "IDLE",
     "execution": "FINISHED_WITH_RETURN",
     "num_of_rounds": "3",
@@ -102,13 +110,30 @@
     "votes_committed": 11,
     "votes_revealed": 10,
     "validator_votes": ["AGREE", "AGREE", "AGREE", "TIMEOUT", "DETERMINISTIC_VIOLATION", "AGREE", "AGREE", "TIMEOUT", "TIMEOUT", "NOT_VOTED", "TIMEOUT"],
-    "receipt_reconciliation": "The same hash was polled to FINALIZED; the watcher timed out while the transaction remained APPEAL_REVEALING. No terminal receipt or stored assessment was available."
+    "equivalence_output": {
+      "verdict": "INCONCLUSIVE",
+      "competitor_price_minor": 0
+    },
+    "result_digest_from_execution_trace": "a2f60bf8d177718dc7b687684730bbe9b79d37a9c28d5411ccafd3fd7da115a9",
+    "assessment_digest_from_execution_trace": "2bc74abe88a9d4b8f8e3d9d7b14fc6f25ec44381ac1658c423699f66579ff15b",
+    "get_assessment_read": "ABSENT: assessment does not exist",
+    "get_assessment_ids_read": [],
+    "receipt_reconciliation": "The same hash was polled to FINALIZED. The receipt is terminal, but its consensus result_name is IDLE and the read-only contract state contains no stored ClaimAssessment."
   },
-  "competitor_price_minor": null,
-  "authorized_credit_minor": null,
-  "result_digest": null,
-  "assessment_digest": null,
-  "assessment_digest_match": null,
+  "competitor_price_minor": 0,
+  "authorized_credit_minor": 0,
+  "result_digest": "a2f60bf8d177718dc7b687684730bbe9b79d37a9c28d5411ccafd3fd7da115a9",
+  "assessment_digest": "2bc74abe88a9d4b8f8e3d9d7b14fc6f25ec44381ac1658c423699f66579ff15b",
+  "digest_reproduction": {
+    "canonical_model_json": "{\"competitor_price_minor\":0,\"verdict\":\"INCONCLUSIVE\"}",
+    "result_digest_reproduced": "a2f60bf8d177718dc7b687684730bbe9b79d37a9c28d5411ccafd3fd7da115a9",
+    "assessment_digest_reproduced": "2bc74abe88a9d4b8f8e3d9d7b14fc6f25ec44381ac1658c423699f66579ff15b",
+    "result_digest_match": true,
+    "assessment_digest_match": true,
+    "comparison_scope": "Independent canonical reproduction matches the two digest values present in the finalized execution trace; get_assessment has no stored digest value to compare."
+  },
+  "assessment_digest_match": true,
+  "assessment_digest_match_scope": "Finalized execution trace versus independent reproduction; not a getter-state comparison because get_assessment is absent.",
   "authorization_present": false,
   "authorization_id": null,
   "authorization_digest": null,
@@ -131,7 +156,7 @@
     },
     {
       "tx": "0x9afdddb7ec37aa1e193b816a5ae5be1ad2cde7862a20202d8179a7d9d449e969",
-      "status_observed": "APPEAL_REVEALING",
+      "status_observed": "FINALIZED",
       "result_name": "IDLE",
       "execution": "FINISHED_WITH_RETURN",
       "num_of_rounds": "3",
@@ -140,13 +165,32 @@
       "votes_committed": 11,
       "votes_revealed": 10,
       "validator_votes": ["AGREE", "AGREE", "AGREE", "TIMEOUT", "DETERMINISTIC_VIOLATION", "AGREE", "AGREE", "TIMEOUT", "TIMEOUT", "NOT_VOTED", "TIMEOUT"],
-      "receipt_reconciliation": "Same-hash receipt polling timed out before FINALIZED; no rebroadcast was made."
+      "equivalence_output": {
+        "verdict": "INCONCLUSIVE",
+        "competitor_price_minor": 0
+      },
+      "tx_execution_hash": "0xdf8bcf2f56268cf944dbf46a66923be57e364efe194e306136a91960f924b37f",
+      "read_state_block_range": {
+        "activation_block": "18337865",
+        "processing_block": "18337881",
+        "proposal_block": "18337883"
+      },
+      "get_assessment_read": "ABSENT: assessment does not exist",
+      "get_purchase_read": {
+        "claim_assessed": false,
+        "latest_assessment_id": "",
+        "assessment_count": 0,
+        "authorization_id": ""
+      },
+      "get_assessment_ids_read": [],
+      "authorization_read": "ABSENT: purchase authorization_id is empty; no authorization lookup was possible",
+      "receipt_reconciliation": "Same-hash receipt polling now returns FINALIZED with FINISHED_WITH_RETURN. No rebroadcast was made."
     }
   ],
   "limitations": [
     "Consensus proves agreement about interpretation; it does not authenticate the web evidence.",
     "The public page and price may change after this read-only reconnaissance.",
     "This is one representative Bradbury test fixture, not a production customer claim.",
-    "The semantic assessment submission returned one hash, but Bradbury did not reach FINALIZED during same-hash reconciliation; no stored ClaimAssessment or business verdict exists."
+    "The exact semantic assessment hash is FINALIZED with FINISHED_WITH_RETURN and an INCONCLUSIVE/0 execution output. Read-only get_assessment and get_assessment_ids remain absent, so no stored ClaimAssessment or authorization exists; the trace-level digest proof is recorded separately."
   ]
 }
